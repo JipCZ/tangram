@@ -81,7 +81,6 @@ if [ $(cat $LOG1|wc -l) -gt 0 ]; then
 		cat $LOG1 | mail -a from:iptvmaster@coprosys.cz -s "POZOR - Už zase má krámy" $REPORT
         	touch $LOCK1
 		### Testing - send to @Martin Tecl
-		curl -k -X POST --data-urlencode "payload={\"username\": \"IPTV-Praha\",\"text\": \"Nefunkční descrambling u:\n*$(cat $LOG1)*\", \"icon_emoji\": \":satellite_antenna:\"}" https://hooks.slack.com/services/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
 
 	fi
 else
@@ -183,7 +182,6 @@ if [ $(cat $LOG3|wc -l) -gt 0 ]; then
 	        echo -e "\n\tThere is something in the log -> Sending report to $REPORT and creating LOCK3 file.\n"
 		cat $LOG3 | mail -a from:iptvmaster@coprosys.cz -s "IPTV! POZOR - problém s descramblinkem" $REPORT
 		### Testing - send to @Martin Tecl
-		curl -k -X POST --data-urlencode "payload={\"username\": \"IPTV-Praha\",\"text\": \"Nefunkční descrambling u:\n*$(cat $LOG3)*\", \"icon_emoji\": \":satellite_antenna:\"}" https://hooks.slack.com/services/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
 
 	        touch $LOCK3
 	fi
@@ -277,7 +275,6 @@ if [ $(cat $LOG5|wc -l) -gt 0 ]; then
 	        echo -e "\n\tThere is something in the log -> Sending report to $REPORT and creating LOCK5 file.\n"
 		cat $LOG5 | mail -a from:iptvmaster@coprosys.cz -s "POZOR - Už zase má krámy" $REPORT
 		### Testing - send to @Martin Tecl
-		curl -k -X POST --data-urlencode "payload={\"username\": \"IPTV-Praha\",\"text\": \"Nefunkční descrambling u:\n*$(cat $LOG5)*\", \"icon_emoji\": \":satellite_antenna:\"}" https://hooks.slack.com/services/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
 
 	        touch $LOCK5
 	fi
