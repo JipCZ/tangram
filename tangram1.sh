@@ -65,9 +65,9 @@ for SID in $(cat $DECRYPT1|awk '{ print $4 }'); do
 		fi
 	else
 		if [ ${#PROGRAM} -ge 8 ];then
-			echo -e "$PROGRAM\t\t - Neprobíhá descrabling, je potřeba prověřit" >> $LOG1
+			echo -e "$PROGRAM\t\t - $SLOT ($DECRYPTIP1) " >> $LOG1
 		else
-			echo -e "$PROGRAM\t\t\t - Neprobíhá descrabling, je potřeba prověřit" >> $LOG1
+			echo -e "$PROGRAM\t\t\t - $SLOT ($DECRYPTIP1) " >> $LOG1
 		fi	
 	fi
 done
@@ -75,11 +75,14 @@ done
 ### Kontrola, že je log prázdný, pokud ne, odešle info o stavu
 if [ $(cat $LOG1|wc -l) -gt 0 ]; then
 	if [ -f "$LOCK1" ]; then
-	echo -e "\n\tDescrabling still not working on some program/s.\n\tLOCK file exist. Nothing to do.\n"
+		echo -e "\n\tDescrabling still not working on some program/s.\n\tLOCK file exist. Nothing to do.\n"
 	else
-        echo -e "\n\tThere is something in the log -> Sending report to $REPORT and creating LOCK1 file.\n"
-	cat $LOG1 | mail -a from:iptvmaster@coprosys.cz -s "POZOR - Už zase má krámy" $REPORT
-        touch $LOCK1
+        	echo -e "\n\tThere is something in the log -> Sending report to $REPORT and creating LOCK1 file.\n"
+		cat $LOG1 | mail -a from:iptvmaster@coprosys.cz -s "POZOR - Už zase má krámy" $REPORT
+        	touch $LOCK1
+		### Testing - send to @Martin Tecl
+		curl -k -X POST --data-urlencode "payload={\"username\": \"IPTV-Praha\",\"text\": \"Nefunkční descrambling u:\n*$(cat $LOG1)*\", \"icon_emoji\": \":satellite_antenna:\"}" https://hooks.slack.com/services/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
+
 	fi
 else
         echo -e "\nLog is empty, deleting LOCK1 file..."
@@ -152,18 +155,22 @@ for SID in $(cat $DECRYPT3|awk '{ print $4 }'); do
 	if [ $STAV -eq 2 ];then
 		if [ ${#PROGRAM} -ge 8 ];then
 			if [ ${#PROGRAM} -le 16 ];then
-				echo -e "$PROGRAM${#PROGRAM}\t\t - v pořádku"
+				echo -e "$PROGRAM\t\t - v pořádku"
 			else
-				echo -e "$PROGRAM${#PROGRAM}\t - v pořádku"
+				echo -e "$PROGRAM\t - v pořádku"
 			fi
 		else
 			echo -e "$PROGRAM\t\t\t - v pořádku"
 		fi
 	else
 		if [ ${#PROGRAM} -ge 8 ];then
-			echo -e "$PROGRAM\t\t - Neprobíhá descrabling, je potřeba prověřit" >> $LOG3
+			if [ ${#PROGRAM} -le 16 ];then
+				echo -e "$PROGRAM\t\t - $SLOT ($DECRYPTIP3) " >> $LOG3
+			else
+				echo -e "$PROGRAM\t - $SLOT ($DECRYPTIP3) " >> $LOG3
+			fi
 		else
-			echo -e "$PROGRAM\t\t\t - Neprobíhá descrabling, je potřeba prověřit" >> $LOG3
+			echo -e "$PROGRAM\t\t\t - $SLOT3 ($DECRYPTIP3) " >> $LOG3
 		fi	
 	fi
 done
@@ -174,7 +181,10 @@ if [ $(cat $LOG3|wc -l) -gt 0 ]; then
 		echo -e "\n\tDescrabling still not working on some program/s.\n\tLOCK file exist. Nothing to do.\n"
 	else
 	        echo -e "\n\tThere is something in the log -> Sending report to $REPORT and creating LOCK3 file.\n"
-		cat $LOG3 | mail -a from:iptvmaster@coprosys.cz -s "POZOR - Už zase má krámy" $REPORT
+		cat $LOG3 | mail -a from:iptvmaster@coprosys.cz -s "IPTV! POZOR - problém s descramblinkem" $REPORT
+		### Testing - send to @Martin Tecl
+		curl -k -X POST --data-urlencode "payload={\"username\": \"IPTV-Praha\",\"text\": \"Nefunkční descrambling u:\n*$(cat $LOG3)*\", \"icon_emoji\": \":satellite_antenna:\"}" https://hooks.slack.com/services/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
+
 	        touch $LOCK3
 	fi
 else
@@ -252,9 +262,9 @@ for SID in $(cat $DECRYPT5|awk '{ print $4 }'); do
 		fi
 	else
 		if [ ${#PROGRAM} -ge 8 ];then
-			echo -e "$PROGRAM\t - Neprobíhá descrabling, je potřeba prověřit" >> $LOG5
+			echo -e "$PROGRAM\t\t - $SLOT ($DECRYPTIP5) " >> $LOG5
 		else
-			echo -e "$PROGRAM\t\t - Neprobíhá descrabling, je potřeba prověřit" >> $LOG5
+			echo -e "$PROGRAM\t\t\t - $SLOT ($DECRYPTIP5) " >> $LOG5
 		fi	
 	fi
 done
@@ -266,6 +276,9 @@ if [ $(cat $LOG5|wc -l) -gt 0 ]; then
 	else
 	        echo -e "\n\tThere is something in the log -> Sending report to $REPORT and creating LOCK5 file.\n"
 		cat $LOG5 | mail -a from:iptvmaster@coprosys.cz -s "POZOR - Už zase má krámy" $REPORT
+		### Testing - send to @Martin Tecl
+		curl -k -X POST --data-urlencode "payload={\"username\": \"IPTV-Praha\",\"text\": \"Nefunkční descrambling u:\n*$(cat $LOG5)*\", \"icon_emoji\": \":satellite_antenna:\"}" https://hooks.slack.com/services/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
+
 	        touch $LOCK5
 	fi
 else
